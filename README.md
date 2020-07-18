@@ -1,6 +1,4 @@
-# rocketchat_ynh
-
-Rocketchat for yunohost
+# RocketChat for yunohost
 
 [![Integration level](https://dash.yunohost.org/integration/rocketchat.svg)](https://dash.yunohost.org/appci/app/rocketchat)  
 [![Install Rocketchat with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=rocketchat)
@@ -31,6 +29,23 @@ Backup stores:
 
 ## Links
 
- * Report a bug: [Issues](/../../issues)
+ * Report a bug: https://github.com/YunoHost-Apps/rocket_ynh/issues
  * Rocketchat website: https://rocket.chat/
+ * Upstream app repository: https://github.com/RocketChat/Rocket.Chat
  * YunoHost website: https://yunohost.org/
+
+ ---
+
+Developer info
+----------------
+
+**Only if you want to use a testing branch for coding, instead of merging directly into master.**
+Please send your pull request to the [testing branch](https://github.com/YunoHost-Apps/REPLACEBYYOURAPP_ynh/tree/testing).
+
+To try the testing branch, please proceed like that.
+```
+sudo yunohost app install https://github.com/YunoHost-Apps/REPLACEBYYOURAPP_ynh/tree/testing --debug
+or
+sudo yunohost app upgrade REPLACEBYYOURAPP -u https://github.com/YunoHost-Apps/REPLACEBYYOURAPP_ynh/tree/testing --debug
+```
+

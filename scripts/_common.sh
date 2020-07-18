@@ -1,10 +1,32 @@
-# common.sh
+#!/bin/bash
 
-ROCKETCHAT_VERSION=0.73.2
-ROCKETCHAT_SHASUM=3dc3eb11f383f7b72b0f23fedb305b6a566fa536a1e5087a4398255deeb864d8
-ROCKETCHAT_DOWNLOAD_URI=https://releases.rocket.chat/${ROCKETCHAT_VERSION}/download
-NODE_VERSION=8.11.4
+#=================================================
+# COMMON VARIABLES
+#=================================================
+
+# dependencies used by the app
+pkg_dependencies="postgresql apt-transport-https"
+
+nodejs_version=12
+
+#=================================================
+# PERSONAL HELPERS
+#=================================================
+
+#=================================================
+# EXPERIMENTAL HELPERS
+#=================================================
+
+#=================================================
+# FUTURE OFFICIAL HELPERS
+#=================================================
+
+
+
+
 DEBIAN_ISSUE=$(grep 9 /etc/debian_version >/dev/null && echo stretch || echo jessie)
+
+
 
 checkcmd() {
   curl -m 1 -s localhost:$port$path/api/v1/info | \

@@ -1,5 +1,4 @@
 #!/bin/bash
-set -eu
 
 #=================================================
 # GENERIC START
@@ -14,6 +13,10 @@ source ./_common.sh
 # MANAGE SCRIPT FAILURE
 #=================================================
 
+ynh_clean_setup () {
+	### Remove this function if there's nothing to clean before calling the remove script.
+	true
+}
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
 
@@ -70,8 +73,6 @@ final_path="/var/lib/$app"
  You should safely delete it before installing this app."
 
 # Save specific settings
-ynh_app_setting_set $app node_version $NODE_VERSION
-ynh_app_setting_set $app rocketchat_version $ROCKETCHAT_VERSION
 ynh_app_setting_set $app serviceuser $serviceuser
 ynh_app_setting_set $app port $port
 ynh_app_setting_set $app final_path $final_path

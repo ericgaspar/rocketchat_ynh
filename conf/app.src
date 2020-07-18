@@ -1,7 +1,7 @@
-SOURCE_URL=https://releases.rocket.chat/0.73.2/download
-SOURCE_SUM=3dc3eb11f383f7b72b0f23fedb305b6a566fa536a1e5087a4398255deeb864d8
+SOURCE_URL=https://github.com/RocketChat/Rocket.Chat/archive/3.4.2.tar.gz
+SOURCE_SUM=de1625d2f5ad02b0cb3ee92dc071bb7f545c8256d7abd3a1bdf18c7208bdcb35
 SOURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=tar.gz
 SOURCE_IN_SUBDIR=true
-SOURCE_FILENAME=rocket.chat-0.73.2.tgz
+SOURCE_FILENAME=Rocket.Chat-3.4.2.tar.gz
 SOURCE_EXTRACT=true
