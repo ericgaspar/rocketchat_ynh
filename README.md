@@ -3,6 +3,8 @@
 [![Integration level](https://dash.yunohost.org/integration/rocketchat.svg)](https://dash.yunohost.org/appci/app/rocketchat)  
 [![Install Rocketchat with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=rocketchat)
 
+
+
 ## Install with
 
 You can either :
@@ -23,9 +25,8 @@ Backup stores:
 
 #### Supported architectures
 
-* x86-64b - [![](https://ci-apps.yunohost.org/ci/logs/rocketchat%20%28Community%29.svg)](https://ci-apps.yunohost.org/ci/apps/rocketchat/)
+* x86-64 - [![](https://ci-apps.yunohost.org/ci/logs/rocketchat%20%28Community%29.svg)](https://ci-apps.yunohost.org/ci/apps/rocketchat/)
 * ARMv8-A - [![](https://ci-apps-arm.yunohost.org/ci/logs/rocketchat%20%28Community%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/rocketchat/)
-* Jessie x86-64b - [![](https://ci-stretch.nohost.me/ci/logs/rocketchat%20%28Community%29.svg)](https://ci-stretch.nohost.me/ci/apps/rocketchat/)
 
 ## Links
 
@@ -34,10 +35,9 @@ Backup stores:
  * Upstream app repository: https://github.com/RocketChat/Rocket.Chat
  * YunoHost website: https://yunohost.org/
 
- ---
+---
 
-Developer info
-----------------
+## Developer info
 
 **Only if you want to use a testing branch for coding, instead of merging directly into master.**
 Please send your pull request to the [testing branch](https://github.com/YunoHost-Apps/REPLACEBYYOURAPP_ynh/tree/testing).
@@ -48,4 +48,3 @@ sudo yunohost app install https://github.com/YunoHost-Apps/REPLACEBYYOURAPP_ynh/
 or
 sudo yunohost app upgrade REPLACEBYYOURAPP -u https://github.com/YunoHost-Apps/REPLACEBYYOURAPP_ynh/tree/testing --debug
 ```
-
