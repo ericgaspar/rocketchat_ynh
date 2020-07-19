@@ -10,7 +10,7 @@ Restart=always
 RestartSec=10
 StandardOutput=syslog 
 StandardError=syslog
-SyslogIdentifier=nodejs-example
+#SyslogIdentifier=nodejs-example
 Environment=NODE_ENV=production PORT=__PORT__ ROOT_URL=https://__DOMAIN__ MONGO_URL=mongodb://localhost:27017/__APP__
 
 [Install]
