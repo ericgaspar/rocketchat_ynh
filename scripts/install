@@ -129,7 +129,8 @@ ynh_system_user_create --username=$app --home_dir=$final_path
 ynh_script_progression --message="Building $app... (this will take some time and resources!)" --weight=240
 
 pushd "$final_path/server/" || ynh_die
-
+npm config set user 0
+npm config set unsafe-perm true
 npm install --production
 
 popd || ynh_die
