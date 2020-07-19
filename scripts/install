@@ -25,13 +25,11 @@ ynh_abort_if_errors
 #=================================================
 
 domain=$YNH_APP_ARG_DOMAIN
-path=$YNH_APP_ARG_PATH
+path_url=$YNH_APP_ARG_PATH
 is_public=$YNH_APP_ARG_IS_PUBLIC
 language=$YNH_APP_ARG_LANG
 
 app=$YNH_APP_INSTANCE_NAME
-dbname=$app
-serviceuser=rocketchat
 
 #=================================================
 # CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
@@ -136,9 +134,9 @@ ynh_script_progression --message="Building $app... (this will take some time and
 
 pushd "$final_path" || ynh_die
 
-	ynh_use_nodejs
-	bin/setup
-	ynh_exec_warn_less yarn run build
+cd $final_path/server/
+
+npm install --production
 
 popd || ynh_die
 
@@ -235,60 +233,60 @@ ynh_script_progression --message="Installation of $app completed" --last
 
 
 
-#=================================================
+# #=================================================
 
 
-# Create user
-id -u $serviceuser || useradd -d "$final_path" -M $serviceuser
+# # Create user
+# id -u $serviceuser || useradd -d "$final_path" -M $serviceuser
 
-# Copy and set systemd configuration
-ynh_replace_string "#ROOTURL#" "$domain" ../conf/rocketchat.service
-ynh_replace_string "#LOCATION#" "${path:-/}" ../conf/rocketchat.service
-ynh_replace_string "#PORT#" "$port" ../conf/rocketchat.service
-ynh_replace_string "#USER#" "$serviceuser" ../conf/rocketchat.service
-ynh_replace_string "#DESTDIR#" "$final_path" ../conf/rocketchat.service
-ynh_replace_string "#DBNAME#" "$dbname" ../conf/rocketchat.service
-
-
-
-
-#set db name into ldap config
-ynh_replace_string "__DB_NAME__" "$db_name" ../conf/rocketchat_ldap.js
-
-
-
-#=================================================
-# DOWNLOAD, CHECK AND UNPACK SOURCE
-#=================================================
+# # Copy and set systemd configuration
+# ynh_replace_string "#ROOTURL#" "$domain" ../conf/rocketchat.service
+# ynh_replace_string "#LOCATION#" "${path:-/}" ../conf/rocketchat.service
+# ynh_replace_string "#PORT#" "$port" ../conf/rocketchat.service
+# ynh_replace_string "#USER#" "$serviceuser" ../conf/rocketchat.service
+# ynh_replace_string "#DESTDIR#" "$final_path" ../conf/rocketchat.service
+# ynh_replace_string "#DBNAME#" "$dbname" ../conf/rocketchat.service
 
 
 
 
-cd $final_path/programs/server/
+# #set db name into ldap config
+# ynh_replace_string "__DB_NAME__" "$db_name" ../conf/rocketchat_ldap.js
 
-sudo -u $serviceuser npm install --production
 
-cd $workdir
 
-systemctl reload nginx
-if [ "$is_public" = "Yes" ];
-then
-	ynh_app_setting_set "$app" skipped_uris "/"
-fi
+# # #=================================================
+# # # DOWNLOAD, CHECK AND UNPACK SOURCE
+# # #=================================================
 
-systemctl start $app.service
-systemctl enable $app.service
 
-# add rocketchat to services
-yunohost service add $app
 
-# wait for rocketchat to populate db and start
-waitforservice
 
-mongo < ../conf/rocketchat_ldap.js
+# cd $final_path/programs/server/
 
-systemctl restart $app.service
+# sudo -u $serviceuser npm install --production
 
-waitforservice
+# cd $workdir
 
-yunohost app ssowatconf
+# systemctl reload nginx
+# if [ "$is_public" = "Yes" ];
+# then
+# 	ynh_app_setting_set "$app" skipped_uris "/"
+# fi
+
+# systemctl start $app.service
+# systemctl enable $app.service
+
+# # add rocketchat to services
+# yunohost service add $app
+
+# # wait for rocketchat to populate db and start
+# waitforservice
+
+# mongo < ../conf/rocketchat_ldap.js
+
+# systemctl restart $app.service
+
+# waitforservice
+
+# yunohost app ssowatconf
