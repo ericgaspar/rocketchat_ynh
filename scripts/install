@@ -73,11 +73,7 @@ ynh_install_app_dependencies $pkg_dependencies
 ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
 
 # Install Yarn
-ynh_install_extra_app_dependencies --repo="deb https://dl.yarnpkg.com/debian/ stable main" --package="yarn" --key="https://dl.yarnpkg.com/debian/pubkey.gpg"
-
-# Install Mongodb
-ynh_install_extra_app_dependencies --repo="deb http://repo.mongodb.org/apt/debian buster/mongodb-org/4.2 main" --package="mongodb-org" --key="https://www.mongodb.org/static/pgp/server-4.2.asc"
-
+#ynh_install_extra_app_dependencies --repo="deb https://dl.yarnpkg.com/debian/ stable main" --package="yarn" --key="https://dl.yarnpkg.com/debian/pubkey.gpg"
 
 if [ "$(lsb_release --codename --short)" = "buster" ]; then
 	ynh_install_extra_app_dependencies --repo="deb http://repo.mongodb.org/apt/debian buster/mongodb-org/4.2 main" --package="$pkg_dependencies_buster" --key="https://www.mongodb.org/static/pgp/server-4.2.asc"
@@ -132,9 +128,7 @@ ynh_system_user_create --username=$app --home_dir=$final_path
 #==============================================
 ynh_script_progression --message="Building $app... (this will take some time and resources!)" --weight=240
 
-pushd "$final_path" || ynh_die
-
-cd $final_path/server/
+pushd "$final_path/server/" || ynh_die
 
 npm install --production
 
@@ -192,7 +186,8 @@ chown -R $app:$app $final_path
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..."
 
-yunohost service add $app --description "Collaborative Markdown notes" --log="/var/log/$app/$app.log"
+yunohost service add $app --description "Chat" --log="/var/log/$app/$app.log"
+yunohost service add mongodb --description "MongoDB daemon" --log "/var/log/mongodb/mongodb.log"
 
 #=================================================
 # START SYSTEMD SERVICE
@@ -210,9 +205,7 @@ ynh_script_progression --message="Configuring SSOwat..." --weight=1
 # Make app public if necessary or protect it
 if [ $is_public -eq 1 ]
 then
-	# Everyone can access the app.
-	# The "main" permission is automatically created before the install script.
-	 	ynh_permission_update --permission "main" --add "visitors"
+	ynh_permission_update --permission "main" --add "visitors"
 fi
 
 #=================================================
