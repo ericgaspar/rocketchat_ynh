@@ -130,9 +130,10 @@ ynh_system_user_create --username=$app --home_dir=$final_path
 ynh_script_progression --message="Building $app... (this will take some time and resources!)" --weight=240
 
 pushd "$final_path/server/" || ynh_die
-npm config set user 0
-npm config set unsafe-perm true
-npm install --production
+
+	ynh_npm config set user 0
+	ynh_npm config set unsafe-perm true
+	ynh_npm install --production
 
 popd || ynh_die
 
@@ -141,8 +142,8 @@ popd || ynh_die
 #=================================================
 ynh_script_progression --message="Configuring a systemd service..." --weight=1
 
-ynh_replace_string --match_string="__ENV_PATH__"  --replace_string="$PATH"    --target_file="../conf/systemd.service"
-ynh_replace_string --match_string="__YNH_NPM__"   --replace_string="$ynh_npm" --target_file="../conf/systemd.service"
+ynh_replace_string --match_string="__ENV_PATH__" --replace_string="$PATH"    --target_file="../conf/systemd.service"
+ynh_replace_string --match_string="__YNH_NPM__"  --replace_string="$ynh_npm" --target_file="../conf/systemd.service"
 
 ynh_add_systemd_config
 
@@ -222,66 +223,3 @@ ynh_systemd_action --service_name=nginx --action=reload
 #=================================================
 
 ynh_script_progression --message="Installation of $app completed" --last
-
-
-
-
-
-
-# #=================================================
-
-
-# # Create user
-# id -u $serviceuser || useradd -d "$final_path" -M $serviceuser
-
-# # Copy and set systemd configuration
-# ynh_replace_string "#ROOTURL#" "$domain" ../conf/rocketchat.service
-# ynh_replace_string "#LOCATION#" "${path:-/}" ../conf/rocketchat.service
-# ynh_replace_string "#PORT#" "$port" ../conf/rocketchat.service
-# ynh_replace_string "#USER#" "$serviceuser" ../conf/rocketchat.service
-# ynh_replace_string "#DESTDIR#" "$final_path" ../conf/rocketchat.service
-# ynh_replace_string "#DBNAME#" "$dbname" ../conf/rocketchat.service
-
-
-
-
-# #set db name into ldap config
-# ynh_replace_string "__DB_NAME__" "$db_name" ../conf/rocketchat_ldap.js
-
-
-
-# # #=================================================
-# # # DOWNLOAD, CHECK AND UNPACK SOURCE
-# # #=================================================
-
-
-
-
-# cd $final_path/programs/server/
-
-# sudo -u $serviceuser npm install --production
-
-# cd $workdir
-
-# systemctl reload nginx
-# if [ "$is_public" = "Yes" ];
-# then
-# 	ynh_app_setting_set "$app" skipped_uris "/"
-# fi
-
-# systemctl start $app.service
-# systemctl enable $app.service
-
-# # add rocketchat to services
-# yunohost service add $app
-
-# # wait for rocketchat to populate db and start
-# waitforservice
-
-# mongo < ../conf/rocketchat_ldap.js
-
-# systemctl restart $app.service
-
-# waitforservice
-
-# yunohost app ssowatconf
