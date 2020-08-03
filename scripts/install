@@ -131,9 +131,7 @@ ynh_script_progression --message="Building $app... (this will take some time and
 
 pushd "$final_path/server/" || ynh_die
 
-	ynh_npm config set user 0
-	ynh_npm config set unsafe-perm true
-	ynh_npm install --production
+	ynh_npm run build
 
 popd || ynh_die
 
@@ -174,6 +172,14 @@ ynh_add_systemd_config
 
 # ynh_store_file_checksum --file="$final_path/.sequelizerc"
 
+
+
+sudo sed -i "s/^#  engine:/  engine: wiredTiger/"  /etc/mongod.conf
+sudo sed -i "s/^#replication:/replication:\n  replSetName: rs01/" /etc/mongod.conf
+sudo systemctl enable mongod && sudo systemctl start mongod
+mongo --eval "printjson(rs.initiate())"
+
+sudo systemctl enable rocketchat && sudo systemctl start rocketchat
 #=================================================
 # GENERIC FINALIZATION
 #=================================================
