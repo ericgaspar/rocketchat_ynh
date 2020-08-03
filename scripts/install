@@ -131,7 +131,7 @@ ynh_script_progression --message="Building $app... (this will take some time and
 
 pushd "$final_path/server/" || ynh_die
 
-	ynh_npm run build
+	ynh_npm install
 
 popd || ynh_die
 
