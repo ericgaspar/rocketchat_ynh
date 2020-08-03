@@ -131,12 +131,12 @@ ynh_script_progression --message="Building $app... (this will take some time and
 
 pushd "$final_path" || ynh_die
 curl https://install.meteor.com/ | sh 
-	sudo -u meteor ynh_npm install
-	sudo -u meteor ynh_npm run postinstall
+	ynh_exec_as -u $app meteor ynh_npm install
+	ynh_exec_as -u $app meteor ynh_npm run postinstall
 
-	sudo -u meteor add rocketchat:lib
+	ynh_exec_as -u $app meteor add rocketchat:lib
 
-	sudo -u meteor build --server-only --directory $final_path
+	ynh_exec_as -u $app meteor build --server-only --directory $final_path
 	cd $final_path/bundle/programs/server
 	ynh_npm install
 
