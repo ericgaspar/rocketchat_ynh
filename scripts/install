@@ -127,13 +127,13 @@ ynh_system_user_create --username=$app --home_dir=$final_path
 #==============================================
 # INSTALL HEDGEDOC
 #==============================================
-ynh_script_progression --message="Building $app... (this will take some time and resources!)" --weight=240
+# ynh_script_progression --message="Building $app... (this will take some time and resources!)" --weight=240
 
-pushd "$final_path/server/" || ynh_die
+# pushd "$final_path/server/" || ynh_die
 
-	ynh_npm install
+# 	ynh_npm install
 
-popd || ynh_die
+# popd || ynh_die
 
 #=================================================
 # SETUP SYSTEMD
@@ -142,44 +142,18 @@ ynh_script_progression --message="Configuring a systemd service..." --weight=1
 
 ynh_replace_string --match_string="__ENV_PATH__" --replace_string="$PATH"    --target_file="../conf/systemd.service"
 ynh_replace_string --match_string="__YNH_NPM__"  --replace_string="$ynh_npm" --target_file="../conf/systemd.service"
+ynh_replace_string --match_string="__PORT__"  --replace_string="$port" --target_file="../conf/systemd.service"
+ynh_replace_string --match_string="__DOMAIN__"  --replace_string="$domain" --target_file="../conf/systemd.service"
 
 ynh_add_systemd_config
 
 # #=================================================
 # # MODIFY A CONFIG FILE
 # #=================================================
-# ynh_script_progression --message="Modifying a config file..."
 
-# cp ../conf/config.json.example "$final_path/config.json"
+ynh_replace_string --match_string="  engine:/"  --replace_string="engine: wiredTiger/"  --target_file="/etc/mongod.conf"
+ynh_replace_string --match_string="replication:/replication:\n"  --replace_string="replSetName: rs01/" --target_file="/etc/mongod.conf"
 
-# # Main config File
-# ynh_replace_string --match_string="__ROOTURL__"    --replace_string="$domain"     --target_file="$final_path/config.json"
-# ynh_replace_string --match_string="__LOCATION__"  --replace_string="${path:-/}"   --target_file="$final_path/config.json"
-# ynh_replace_string --match_string="__PORT__" --replace_string="$port"  --target_file="$final_path/config.json"
-# ynh_replace_string --match_string="__USER__" --replace_string="$serviceuser"  --target_file="$final_path/config.json"
-# ynh_replace_string --match_string="__DESTDIR__" --replace_string="$final_path"   --target_file="$final_path/config.json"
-# ynh_replace_string --match_string="__DBNAME__"     --replace_string="$dbname"      --target_file="$final_path/config.json"
-
-# ynh_store_file_checksum --file="$final_path/config.json"
-
-
-# cp ../conf/.sequelizerc.example "$final_path/.sequelizerc"
-
-# # DB Config File
-# ynh_replace_string --match_string="__DB_USER__" --replace_string="$db_user" --target_file="$final_path/.sequelizerc"
-# ynh_replace_string --match_string="__DB_NAME__" --replace_string="$db_name" --target_file="$final_path/.sequelizerc"
-# ynh_replace_string --match_string="__DB_PASS__" --replace_string="$db_pwd"  --target_file="$final_path/.sequelizerc"
-
-# ynh_store_file_checksum --file="$final_path/.sequelizerc"
-
-
-
-sudo sed -i "s/^#  engine:/  engine: wiredTiger/"  /etc/mongod.conf
-sudo sed -i "s/^#replication:/replication:\n  replSetName: rs01/" /etc/mongod.conf
-sudo systemctl enable mongod && sudo systemctl start mongod
-mongo --eval "printjson(rs.initiate())"
-
-sudo systemctl enable rocketchat && sudo systemctl start rocketchat
 #=================================================
 # GENERIC FINALIZATION
 #=================================================
@@ -197,6 +171,9 @@ ynh_script_progression --message="Integrating service in YunoHost..."
 
 yunohost service add $app --description "Chat" --log="/var/log/$app/$app.log"
 yunohost service add mongodb --description "MongoDB daemon" --log "/var/log/mongodb/mongodb.log"
+
+
+mongo --eval "printjson(rs.initiate())"
 
 #=================================================
 # START SYSTEMD SERVICE
